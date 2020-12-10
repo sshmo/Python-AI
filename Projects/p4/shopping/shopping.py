@@ -1,6 +1,8 @@
 import csv
 import sys
 
+import pandas as pd
+
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 
@@ -59,7 +61,91 @@ def load_data(filename):
     labels should be the corresponding list of labels, where each label
     is 1 if Revenue is true, and 0 otherwise.
     """
-    raise NotImplementedError
+    
+    # Load shopping data from a CSV file `filename`
+    df = pd.read_csv(filename)
+
+    # -------------------- Data cleaning -------------------- #
+
+    # Month, an index from 0 (January) to 11 (December)
+    df['Month'] = df['Month'].map({'Jan': 0, 'Feb': 1, 'Mar': 2,
+                                   'Apr': 3, 'May': 4, 'June': 5, 
+                                   'Jul': 6, 'Aug': 7, 'Sep': 8, 
+                                   'Oct': 9, 'Nov': 10, 'Dec': 11})
+    
+    # VisitorType, an integer 0 (not returning) or 1 (returning)
+    df['VisitorType'] = df['VisitorType'].map({'Returning_Visitor': 1,
+                                               'New_Visitor': 0,
+                                               'Other': 0})
+
+    # Weekend, an integer 0 (if false) or 1 (if true)
+    df['Weekend'] = df['Weekend'].astype('int64')
+
+    # Each label is 1 if Revenue is true, and 0 otherwise
+    df['Revenue'] = df['Revenue'].astype('int64')
+
+    # ----- Convert shopping data into a list of evidence lists ----- #
+    evidence = [
+        [
+            # - Administrative, an integer
+            df['Administrative'][i],
+
+            # - Administrative_Duration, a floating point number          
+            df['Administrative_Duration'][i],
+
+            # - Informational, an integer
+            df['Informational'][i],
+
+            # - Informational_Duration, a floating point number
+            df['Informational_Duration'][i],
+
+            # - ProductRelated, an integer
+            df['ProductRelated'][i],
+
+            # - ProductRelated_Duration, a floating point number
+            df['ProductRelated_Duration'][i],
+
+            # - BounceRates, a floating point number
+            df['BounceRates'][i],
+
+            # - ExitRates, a floating point number
+            df['ExitRates'][i],
+            
+            # - PageValues, a floating point number
+            df['PageValues'][i],
+
+            # - SpecialDay, a floating point number
+            df['SpecialDay'][i],
+            
+            # - Month, an index from 0 (January) to 11 (December)
+            df['Month'][i],
+
+            # - OperatingSystems, an integer
+            df['OperatingSystems'][i],
+
+            # - Browser, an integer
+            df['Browser'][i],
+
+            # - Region, an integer
+            df['Region'][i],
+
+            # - TrafficType, an integer
+            df['TrafficType'][i],
+            
+            # - VisitorType, an integer 0 (not returning) or 1 (returning)
+            df['VisitorType'][i],
+
+            # - Weekend, an integer 0 (if false) or 1 (if true)
+            df['Weekend'][i]
+        ]
+
+        for i in range(df.shape[0])
+    ]
+
+    # Convert Revenue to a list of labels
+    labels = list(df['Revenue'])
+
+    return (evidence, labels)
 
 
 def train_model(evidence, labels):
@@ -67,7 +153,13 @@ def train_model(evidence, labels):
     Given a list of evidence lists and a list of labels, return a
     fitted k-nearest neighbor model (k=1) trained on the data.
     """
-    raise NotImplementedError
+    # Make a k-nearest neighbor model (k=1)
+    model = KNeighborsClassifier(n_neighbors=1)
+    
+    # Train model on list of evidence lists and a list of labels
+    X_training = evidence
+    y_training = labels
+    return model.fit(X_training, y_training)
 
 
 def evaluate(labels, predictions):
@@ -85,7 +177,31 @@ def evaluate(labels, predictions):
     representing the "true negative rate": the proportion of
     actual negative labels that were accurately identified.
     """
-    raise NotImplementedError
+    # Initialize sensitivity and specificity
+    sens = 0
+    spec = 0
+    total_sens = 0
+    total_spec = 0
+
+    # Compute how well we performed
+    for actual, predicted in zip(labels, predictions):
+        
+        # Compute sensitivity
+        if actual == 1:
+            total_sens += 1 
+            if actual == predicted:
+                sens += 1
+        
+        # Compute specificity
+        else:
+            total_spec += 1
+            if actual == predicted:
+                spec += 1
+
+    sensitivity = sens / total_sens
+    specificity = spec / total_spec
+
+    return sensitivity, specificity
 
 
 if __name__ == "__main__":
