@@ -1,5 +1,6 @@
 import nltk
 import sys
+import string
 
 TERMINALS = """
 Adj -> "country" | "dreadful" | "enigmatical" | "little" | "moist" | "red"
@@ -15,7 +16,12 @@ V -> "smiled" | "tell" | "were"
 """
 
 NONTERMINALS = """
-S -> N V
+    S -> VP | NP VP | S Conj S
+    AdjP -> Adj | Adj AdjP
+    NP -> N | Det N | Det AdjP N | AdjP NP | NP PP | NP AdvP | NP Conj NP
+    PP -> P NP
+    VP -> V | V NP | V PP | V AdvP | VP Conj VP    
+    AdvP -> Adv | AdvP Adv 
 """
 
 grammar = nltk.CFG.fromstring(NONTERMINALS + TERMINALS)
@@ -62,7 +68,33 @@ def preprocess(sentence):
     and removing any word that does not contain at least one alphabetic
     character.
     """
-    raise NotImplementedError
+    # Initialize the list of `sentence` words, punctuation and alphabets
+    prep_list = []
+    punctuations = string.punctuation
+    alphabets = 'abcdefghijklmnopqrstuvwxyz'
+
+    # Make a tokenized copy of the `sentence`
+    naive_list = nltk.word_tokenize(sentence)
+    
+    for item in naive_list:
+        
+        # Ignoring punctuations or digits that obviously 
+        # does not contain any alphabetic character
+        if item in punctuations or item.isdigit():
+            continue
+        
+        # Ensuring that item contains at least one alphabetic character
+        Flag = False
+        for char in alphabets:
+            if char in item.lower():
+                Flage = True
+                break
+        
+        # Add item to the list of Pre-processed words
+        if Flage:
+            prep_list.append(item.lower())
+
+    return prep_list
 
 
 def np_chunk(tree):
@@ -72,7 +104,31 @@ def np_chunk(tree):
     whose label is "NP" that does not itself contain any other
     noun phrases as subtrees.
     """
-    raise NotImplementedError
+    
+    # Initialize the list of noun phrases subtrees
+    chunks = []
+
+    # Find all subtrees
+    subtrees = tree.subtrees()
+
+    for subtree in subtrees:
+        
+        # Investigate all subtrees with NP label
+        if subtree.label() == 'NP':
+            
+            # Ensuring that the subtree with NP label
+            # does not contain any subtree with NP label
+            Flag = True
+            for i in range(len(subtree)):
+                if subtree[i].label() == 'NP':
+                    Flag = False
+                    break
+            
+            # Add subtree to the list of noun phrase chunks
+            if Flag:
+                chunks.append(subtree)
+
+    return chunks
 
 
 if __name__ == "__main__":

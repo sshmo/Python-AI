@@ -1,0 +1,7 @@
+What are the types of supervised learning?
+When was Python 3.0 released?
+How do neurons connect in a neural network?
+Define intelligent agents?
+What is machine perception?
+What is theory of probability about?
+What is called sample space?
