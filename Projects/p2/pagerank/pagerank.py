@@ -57,7 +57,37 @@ def transition_model(corpus, page, damping_factor):
     linked to by `page`. With probability `1 - damping_factor`, choose
     a link at random chosen from all pages in the corpus.
     """
-    raise NotImplementedError
+    
+    # corpus should not be empty
+    if len(corpus) == 0:
+        raise "corpus should not be empty"
+    
+    # initialize the probability distribution dictionary
+    prob = {}
+    # sum_prob = 0
+    
+    # the given page has no links:
+    if len(corpus[page]) == 0:
+        for page_i in corpus:
+            prob[page_i] = 1 / len(corpus)
+            # sum_prob = sum_prob + prob[page_i]
+    
+    # the given page has liks to other pages
+    else:
+        for page_i in corpus:
+            
+            # page_i was linked via the given page
+            if page_i in corpus[page]:
+                prob[page_i] = (1 - damping_factor)/len(corpus) + damping_factor/len(corpus[page])
+                # sum_prob = sum_prob + prob[page_i] 
+            
+            # page_i was not linked via the given page
+            else:
+                prob[page_i] = (1 - damping_factor)/len(corpus)
+                # sum_prob = sum_prob + prob[page_i]  
+
+    # print(sum_prob)
+    return prob
 
 
 def sample_pagerank(corpus, damping_factor, n):
@@ -69,7 +99,44 @@ def sample_pagerank(corpus, damping_factor, n):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    raise NotImplementedError
+    # Initializing a list of all pages
+    pages = []
+
+    # Initializing pagerank
+    pagerank = {}
+
+    for page_i in corpus:
+        # Making a list of all pages to randomly pick one of them
+        pages.append(page_i)
+        # Initializeing each page probability
+        pagerank[page_i] = 0
+
+    # Pick a random page from pages
+    page = pages[random.randrange(0, len(pages))]
+
+    # Given the transition_model, pick sample pages from a previous page (n times)
+    for _1 in range(n):
+
+        prob = transition_model(corpus, page, damping_factor)
+        
+        # Making the population and weights for random.choice
+        population = []
+        weights = []
+        for page, probaility in prob.items():
+            population.append(page)
+            weights.append(probaility)
+        
+        # Pick a weighted random page from pages
+        page = random.choices(population, weights)[0]
+
+        # Update the probability fot the picked page
+        pagerank[page] += 1
+    
+    # Normalizing the results
+    for pag_i in corpus:
+        pagerank[pag_i] = pagerank[pag_i]/n
+
+    return pagerank
 
 
 def iterate_pagerank(corpus, damping_factor):
@@ -81,7 +148,49 @@ def iterate_pagerank(corpus, damping_factor):
     their estimated PageRank value (a value between 0 and 1). All
     PageRank values should sum to 1.
     """
-    raise NotImplementedError
+    
+    # Initializing pagerank and  each page rank probability
+    pagerank = {}
+    for page_i in corpus:
+        pagerank[page_i] = 1 / len(corpus)
+    
+    # Initializing eps and tresh
+    tresh = 0.002
+    eps = 0.001
+
+    while tresh > eps:
+        
+        # Initializing deltas: delta is the defrence between current pagerank[page_i] 
+        # and previously calculated pagerank[page_i] 
+        
+        deltas = []
+        sum_pagerank = 0
+        
+        for page_i in corpus:
+            
+            temp = pagerank[page_i]
+            
+            # Calculating pagerank[page_i] from pagerank formula
+            sigma = 0
+            for page_j in corpus:
+                if corpus[page_j] == 0:
+                    sigma += 1 / len(corpus)
+                if page_i in corpus[page_j]:
+                    sigma += pagerank[page_j]/len(corpus[page_j])
+            pagerank[page_i] = (1 - damping_factor)/len(corpus) + damping_factor*sigma
+            
+            sum_pagerank += pagerank[page_i]
+        
+            # Updating deltas for page_i
+            deltas.append(abs(pagerank[page_i]-temp))
+        
+        tresh = max(deltas)
+
+    # Normalizing the results
+    for page_i in corpus:
+        pagerank[page_i] = pagerank[page_i]/sum_pagerank
+
+    return pagerank
 
 
 if __name__ == "__main__":
