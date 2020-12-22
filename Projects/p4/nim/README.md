@@ -19,9 +19,15 @@ Write an AI that teaches itself to play Nim through reinforcement learning.
 
     AI's Turn
     AI chose to take 1 from pile 2.
+    
+    
+### The problem solving approch:
+
+The problem was solved using Q-learning algorithm.
+
 
 A short video demonstrating my implementation of this project can be found [here](https://youtu.be/I0d91SVTkvM)
 
-# Specification
+### Specification
 
 Specification for this project can be found [here](https://cs50.harvard.edu/ai/2020/projects/4/nim/#specification)
