@@ -1,5 +1,5 @@
 # Python-AI
-  This Python-AI project includes my code implementation of the corresponding [course](https://cs50.harvard.edu/ai/2020/).
+  Python_AI is a project for implementation of machine learning libraries as well as using knowledge of artificial intelligence ([More information](https://cs50.harvard.edu/ai/2020/)).
 
 
 The libraries used in this project are:
@@ -14,7 +14,7 @@ The libraries used in this project are:
   - **nltk** A leading platform for building Python programs to work with human language data, used for parsing and tokenization.
   
 
-The projects that the course proposed to build are:
+The projects:
 
   0.a. [***Degrees***](https://github.com/sshmo/Python-AI/tree/master/Projects/p0/degrees)
 
