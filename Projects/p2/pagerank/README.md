@@ -14,8 +14,12 @@ Write an AI to rank web pages by importance.
       3.html: 0.2202
       4.html: 0.1307
 
+### The problem solving approch:
+
+The problem was solved using sampling and iteration techniques to approximate inference.
+
 A short video demonstrating my implementation of this project can be found [here](https://youtu.be/eM3KBouZW8U).
 
-# Specification
+### Specification
 
 Specification for this project can be found [here](https://cs50.harvard.edu/ai/2020/projects/2/pagerank/#specification).
