@@ -28,9 +28,12 @@ Write an AI to assess the likelihood that a person will have a particular geneti
         True: 0.0000
         False: 1.0000
 
+### The problem solving approch:
+
+The problem was solved using Bayesian Networks.
 
 A short video demonstrating my implementation of this project can be found [here](https://youtu.be/LEl4KzX1NEk).
 
-# Specification
+### Specification
 
 Specification for this project can be found [here](https://cs50.harvard.edu/ai/2020/projects/2/heredity/#specification).
