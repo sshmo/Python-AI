@@ -25,10 +25,13 @@ Write an AI to identify which traffic sign appears in a photograph.
     500/500 [==============================] - 10s 20ms/step - loss: 0.2497 - accuracy: 0.9256
     333/333 - 5s - loss: 0.1616 - accuracy: 0.9535
 
+### The problem solving approch:
+
+The problem was solved using OpenCV to load images and Convolutional neural network for modelling the data.
+
 A short video demonstrating my implementation of this project can be found [here](https://youtu.be/CsAt3N04TYk)
 
-# Specification
-
+### Specification
 
 Specification for this project can be found [here](https://cs50.harvard.edu/ai/2020/projects/5/traffic/#specification)
 
