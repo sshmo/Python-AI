@@ -14,9 +14,9 @@ Write an AI to generate crossword puzzles.
     ██████████████
 
 
-The problem solving approch:
+### The problem solving approch:
 
-### The promlem was a constraint satisfaction problem, and was solved using AC-3 and backtracking algorithms.
+The promlem was a constraint satisfaction problem, and was solved using AC-3 and backtracking algorithms.
 
 A short video demonstrating my implementation of this project can be found [here](https://youtu.be/UNUaHx--tKk)
 
